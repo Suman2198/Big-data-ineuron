@@ -1,0 +1,106 @@
+Download Dataset 1 - https://drive.google.com/file/d/1WrG-9qv6atP-W3P_-gYln1hHyFKRKMHP/view
+
+Download Dataset 2 - https://drive.google.com/file/d/1-JIPCZ34dyN6k9CqJa-Y8yxIGq6vTVXU/view
+
+
+1. Create a schema based on the given dataset
+
+-> AgentPerformance Schema
+
+     create table agentperformance(
+     sno int,
+     date Timestamp,
+     agentname string,
+     TotalChats int,
+     avgresponsetime Timestamp,
+     avgresolutiontime Timestamp,
+     avgrating int,
+     TotalFeedback int
+     )
+     row format delimited fields terminated by ‘,’
+     stored as textfile;
+
+
+  AgentLogingReport Table Schema
+
+   create table if not exists agentloging(
+   sno int,
+   agentname string,
+   Date Timestamp,
+   LoginTime Timestamp,
+   LogoutTime Timestamp,
+   Duration Timestamp
+   )
+   row format delimited fields terminated by ‘,’
+   stored as textfile
+   tblproperties ("skip.header.line.count" = "1")';
+.........................................................................................................................................................................................................
+
+2. Dump the data inside the hdfs in the given schema location.
+
+->   load data local inpath ‘/home/cloudera/Desktop/AgentPerformance.csv’ into table agentperformance;
+
+     load data local inpath ‘/home/cloudera/Desktop/AgentLogingReport.csv’ into table agentloging;
+............................................................................................................................................................................................................
+
+3. List of all agents' names.
+
+-> Select DISTINCT agentname from agentperformance;
+.................................................................................................................................................................................................................
+
+4. Find out agent average rating.
+
+-> Select agentname , avg(avgrating) from agentperformance group by agentname;
+..............................................................................................................................................................................................................................
+5. Total working days for each agents 
+
+-> Select date,agentname from agentperformance group by date ,agentname;
+..........................................................................................................................................................................................................................
+6. Total query that each agent have taken 
+
+-> Select agentname , sum(totalchats) from agentperformance group by agentname;
+.......................................................................................................................................................................
+
+7. Total Feedback that each agent have received 
+
+-> Select agentname , sum(totalfeedbacks) from agentperformance group by agentname;
+......................................................................................................................................................................................
+
+8. Agent name who have average rating between 3.5 to 4 
+
+-> Select agentname, avgrating from agentperformance group by agentname having avg(avgrating)>=3.5 AND avg(avgrating)<=4;
+................................................................................................................................................................................
+
+9. Agent name who have rating less than 3.5 
+
+-> Select agentname, avgrating from agentperformance group by agentname having avg(avgrating)<3.5;
+....................................................................................................................................................................................
+
+10. Agent name who have rating more than 4.5 
+
+-> Select agentname, avgrating from agentperformance group by agentname having avg(avgrating)>4.5;
+...................................................................................................................................................................................
+
+11. How many feedback agents have received more than 4.5 average
+
+-> Select count(avgrating) from agentperformance where avgrating> 4.5;
+............................................................................................................................................................................
+
+12. average weekly response time for each agent 
+
+-> 
+13. average weekly resolution time for each agents
+ 
+14. Find the number of chat on which they have received a feedback
+
+-> select sum (totalchats), AgentName from AgentPerformance where totalfeedback! =0 group by agentname;
+.....................................................................................................................................................................................
+ 
+15. Total contribution hour for each and every agents weekly basis 
+
+
+16. Perform inner join, left join and right join based on the agent column and after joining the table export that data into your local system.
+17. Perform partitioning on top of the agent column and then on top of that perform bucketing for each partitioning.
+
+
+
